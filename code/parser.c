@@ -16,6 +16,9 @@ typedef struct JSON_OBJECT_STRUCT {
 
 void parseJson(char * stringToParse, char * parsedString) {
 	int stringToParseLength = strlen(stringToParse);
+	int keyCount = 1;
+	json_key * keyList;
+	keyList = malloc(sizeof(struct JSON_KEY_STRUCT) * keyCount);
 	for (int i = 0; i < stringToParseLength;i++) {
 		// Start parsing an object
 		if (stringToParse[i] == '{')  {
@@ -38,11 +41,7 @@ void parseJson(char * stringToParse, char * parsedString) {
 						i++;
 					}
 					i++;
-					for (int j = 0; j < keyLength; j++) {
-						printf("%c", key[j]);
-					}
 
-					printf(": %d\n", keyLength);
 					S: 
 					if (stringToParse[i] == ' ') {
 						// skip it
@@ -60,7 +59,7 @@ void parseJson(char * stringToParse, char * parsedString) {
 							while (stringToParse[i] != '"') {
 								value[valueLength - 1] = stringToParse[i];
 								valueLength++;
-								key = realloc(value,valueLength);
+								value = realloc(value,valueLength);
 								i++;
 							}
 							// String finishes
@@ -70,20 +69,24 @@ void parseJson(char * stringToParse, char * parsedString) {
 								if (stringToParse[i] != ' ') {
 									value[valueLength - 1] = stringToParse[i];
 									valueLength++;
-									key = realloc(value,valueLength);
+									value = realloc(value,valueLength);
 								}
 								i++;
 							}
+
 						}
-					}
-					printf("%d :", valueLength);
-					for (int k = 0; k < valueLength; k++) {
-						printf("%c", value[k]);
 					}
 					keyValuePair->keyName = key;
 					keyValuePair->value = value; 
 					keyValuePair->keyLength = keyLength - 1;
 					keyValuePair->valueLength = valueLength -1;
+					keyList[keyCount - 1].keyName = keyValuePair->keyName;
+					keyList[keyCount - 1].value = keyValuePair->value;
+					keyList[keyCount - 1].keyLength = keyValuePair->keyLength;
+					keyList[keyCount - 1].valueLength = keyValuePair->valueLength;
+					keyCount++;
+					printf(" %s \n", keyList[0].keyName);
+					printf(" %s \n", keyList[0].value);
 					
 				} else if (stringToParse[i] != ' ') {
 					printf("%c \n", stringToParse[i]);
@@ -97,7 +100,7 @@ void parseJson(char * stringToParse, char * parsedString) {
 }
 
 int main(void) {
-	char * buffer = "{\"name\":\"test\"}";
+	char * buffer = "{\"name\":test,}";
 	char parsedJson[1024];
 	parseJson(buffer,parsedJson);
 	
