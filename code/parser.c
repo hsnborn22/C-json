@@ -10,15 +10,30 @@ typedef struct JSON_KEY_STRUCT {
 } json_key;
 
 typedef struct JSON_OBJECT_STRUCT {
+	char * name;
 	int keyCount;
 	json_key * keyList;
+	int subObjectCount;
+	struct JSON_OBJECT_STRUCT * subObjects;
 } json_object;
 
-void parseJson(char * stringToParse, char * parsedString) {
+char * splitString(char * splitting, int start,int end) {
+	char * splittedString;
+	splittedString = malloc(end - start + 1);
+	for (int i = 0; i <= end-start; i++) {
+		splittedString[i] = splitting[start+i];
+	}
+	return splittedString;
+}
+
+json_object * parseJson(char * stringToParse) {
 	int stringToParseLength = strlen(stringToParse);
 	int keyCount = 1;
+	int subObjCount = 1;
 	json_key * keyList;
 	keyList = malloc(sizeof(struct JSON_KEY_STRUCT) * keyCount);
+	json_object * subObjects;
+	subObjects = malloc(sizeof(struct JSON_OBJECT_STRUCT) * subObjCount);
 	for (int i = 0; i < stringToParseLength;i++) {
 		// Start parsing an object
 		if (stringToParse[i] == '{')  {
@@ -65,6 +80,20 @@ void parseJson(char * stringToParse, char * parsedString) {
 							}
 							// String finishes
 							i++;
+						} else if (stringToParse[i] == '{') {
+							// parse the object as before, but this time store the object in the subObjects array of structs inside our parsedJson struct
+							int k = i;
+							while (stringToParse[k] != '}') {
+								k++;
+							}
+							char * subString = splitString(stringToParse, i, k);
+							json_object * subObject = parseJson(subString);
+							subObjects[subObjCount - 1].keyCount = subObject->keyCount;
+							subObjects[subObjCount - 1].keyList = subObject->keyList;
+							subObjects[subObjCount-1].name = key;
+							subObjects = realloc(subObjects, sizeof(struct JSON_OBJECT_STRUCT));
+							subObjCount++;
+							goto H;
 						} else {
 							while (stringToParse[i] != ',') {
 								if (stringToParse[i] != ' ') {
@@ -74,7 +103,6 @@ void parseJson(char * stringToParse, char * parsedString) {
 								}
 								i++;
 							}
-
 						}
 					}
 					keyValuePair->keyName = key;
@@ -87,9 +115,8 @@ void parseJson(char * stringToParse, char * parsedString) {
 					keyList[keyCount - 1].valueLength = keyValuePair->valueLength;
 					keyCount++;
 					keyList = realloc(keyList, sizeof(struct JSON_KEY_STRUCT) * keyCount);
-					printf(" %s \n", keyList[keyCount - 2].keyName);
-					printf(" %s \n", keyList[keyCount - 2].value);
 					
+					H: 
 					while (stringToParse[i] == ' ') {
 						// skip character
 						i++;
@@ -100,22 +127,26 @@ void parseJson(char * stringToParse, char * parsedString) {
 						goto D;
 					} else if (stringToParse[i] == '}') {
 						// we will return the json parsed object.
+						json_object * parsedJson;
+						parsedJson = malloc(sizeof(struct JSON_OBJECT_STRUCT));
+						parsedJson->keyCount = keyCount - 1;
+						parsedJson->keyList = keyList;
+						parsedJson->subObjects = subObjects;
+						parsedJson->subObjectCount = subObjCount - 1;
+						return parsedJson;
 					}
 					
 				} else if (stringToParse[i] != ' ') {
 					continue;
 				}
-					// If not inside a string (i.e value or key) type token
-				
 			}
 		}
 	}
 }
 
 int main(void) {
-	char * buffer = "{\"name\":\"test\", \"favcolor\": \"red\"}";
-	char parsedJson[1024];
-	parseJson(buffer,parsedJson);
-	
+	char * buffer = "{\"name\":\"test\", \"favcolors\": {\"color1\":\"red\"}, \"surname\":\"Muller\"}";
+	json_object * parsedJson = parseJson(buffer);
+	printf("%d %d", parsedJson->keyCount, parsedJson->subObjectCount);
 	return 0;
 }
