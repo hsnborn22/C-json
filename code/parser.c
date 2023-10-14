@@ -24,6 +24,7 @@ void parseJson(char * stringToParse, char * parsedString) {
 		if (stringToParse[i] == '{')  {
 			while (stringToParse[i] != '}') {
 				i++;
+				D:
 				json_key * keyValuePair;
 				keyValuePair = malloc(sizeof(struct JSON_KEY_STRUCT));
 				if (stringToParse[i] == '"') {
@@ -85,11 +86,23 @@ void parseJson(char * stringToParse, char * parsedString) {
 					keyList[keyCount - 1].keyLength = keyValuePair->keyLength;
 					keyList[keyCount - 1].valueLength = keyValuePair->valueLength;
 					keyCount++;
-					printf(" %s \n", keyList[0].keyName);
-					printf(" %s \n", keyList[0].value);
+					keyList = realloc(keyList, sizeof(struct JSON_KEY_STRUCT) * keyCount);
+					printf(" %s \n", keyList[keyCount - 2].keyName);
+					printf(" %s \n", keyList[keyCount - 2].value);
+					
+					while (stringToParse[i] == ' ') {
+						// skip character
+						i++;
+					}
+					if (stringToParse[i] == ',') {
+						// parse next key value pair:
+						i++;
+						goto D;
+					} else if (stringToParse[i] == '}') {
+						// we will return the json parsed object.
+					}
 					
 				} else if (stringToParse[i] != ' ') {
-					printf("%c \n", stringToParse[i]);
 					continue;
 				}
 					// If not inside a string (i.e value or key) type token
@@ -100,7 +113,7 @@ void parseJson(char * stringToParse, char * parsedString) {
 }
 
 int main(void) {
-	char * buffer = "{\"name\":test,}";
+	char * buffer = "{\"name\":\"test\", \"favcolor\": \"red\"}";
 	char parsedJson[1024];
 	parseJson(buffer,parsedJson);
 	
