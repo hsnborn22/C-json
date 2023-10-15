@@ -10,11 +10,13 @@ typedef struct OBJECT_STRUCT {
 typedef struct MULTI_TYPE_ARRAY_STRUCT {
     int stringCount;
     int objectCount;
+    int subArrayCount;
     char ** stringList;
     object * objectList;
+    struct MULTI_TYPE_ARRAY_STRUCT * subArrayList;
 } multitypearray;
 
-void parseArray(char * input, int stringLength) {
+multitypearray * parseArray(char * input, int stringLength) {
     multitypearray * mltReturn;
     mltReturn = malloc(sizeof(struct MULTI_TYPE_ARRAY_STRUCT));
     if (mltReturn == NULL) {
@@ -22,8 +24,8 @@ void parseArray(char * input, int stringLength) {
     } else {
         printf("Memory allocation successfull. \n");
     }
-    int stringCount, objectCount;
-    stringCount = objectCount = 1;
+    int stringCount, objectCount, subArrayCount;
+    stringCount = objectCount = subArrayCount = 1;
     char ** stringList;
     stringList = malloc(stringCount*sizeof(char*));
     if (stringList == NULL) {
@@ -31,10 +33,15 @@ void parseArray(char * input, int stringLength) {
     } else {
         printf("Good\n");
     }
+    object * objectList;
+    objectList = malloc(sizeof(struct OBJECT_STRUCT)*objectCount);
+    multitypearray * subArrayList;
+    subArrayList = malloc(sizeof(struct MULTI_TYPE_ARRAY_STRUCT) * subArrayCount);
     for (int i = 0; i < stringLength; i++) {
         if (input[i] == '[') {
             // Start parsing for array
             i++;
+            D:
             while (input[i] != ']') {
                 if (input[i] == '"') {
                     // start parsing for string
@@ -54,19 +61,51 @@ void parseArray(char * input, int stringLength) {
                     stringList = realloc(stringList, sizeof(char *) * stringCount);
                     printf("%s \n", stringList[stringCount - 2]);
                     free(str);
+                    i++;
+                    while (input[i] == ' ') {
+                        i++;
+                    }
+                    if (input[i] == ',') {
+                        i++;
+                        goto D;
+                    }
+                } else if (input[i] == '{') {
+                    object * newObject;
+                    newObject = malloc(sizeof(struct OBJECT_STRUCT));
+                    objectList[objectCount-1] = *newObject;
+                    objectCount++;
+                    objectList = realloc(objectList, sizeof(struct OBJECT_STRUCT)*objectCount);
+                    printf("%d",i);
+                    free(newObject);      
+                } else if (input[i] == '[') {
+                    int k = i;
+                    while (input[k] != ']') {
+                        k++;
+                    }
+                    char * splitString;
+                    int splitStringLength;
+                    // stuff
+                    multitypearray * subArray = parseArray(splitString, splitStringLength);
                 }
                 i++;
             }
         }
     }
+    mltReturn->stringCount = stringCount;
+    mltReturn->objectCount = objectCount;
+    mltReturn->subArrayCount = subArrayCount;
+    mltReturn->stringList = stringList;
+    mltReturn->objectList = objectList;
+    free(objectList);
     free(stringList);
-    free(mltReturn);
+    return mltReturn;
 
 }
 
 int main(void) {
-    char input[] = "[\"hello\", \"hi\"]";
+    char input[] = "[\"hello\", {\"ciao ciao\"}]";
     int length = strlen(input);
-    parseArray(input, length);
+    multitypearray* ab = parseArray(input, length);
+    printf("\n %d %d %d \n", ab->stringCount, ab->objectCount, ab->subArrayCount);
     return 0;
 }
