@@ -1,2 +1,2 @@
 # C-json
-A C json parser written from scratch
+Trying to write a functioning C json parser from scratch in as few lines of code as possible.
