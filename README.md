@@ -1,5 +1,5 @@
 # C-json
-A lightweight minimalistic C json parser written from scratch (no third party dependencies) written in under 300 lines of code.
+A lightweight minimalistic C json parser written from scratch (no third party dependencies) in under 300 lines of code.
 
 
 The objective of this parser is to be fast, small, compact, easy to use and of course being able to get the job done in 99% of the cases (with some problems that occasionally can be left to the user to be dealt with in exchange for the extremely small size of this library).
