@@ -30,7 +30,11 @@ The library is able to parse json with almost all key-value pairs you would need
 
 To parse json you will use the parseJson function included in the jsonParser.c file. It will take a string as an input (the raw JSON you want to parse) and return a json_object pointer.
 ```c
-json_object * parseJson(char * stringToParse)
+json_object * parseJson(char * stringToParse) {
+	// start code ...
+	// ...
+	// ... end code
+}
 ```
 
 ### The json_object type:
