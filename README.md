@@ -12,6 +12,9 @@ To use the library in your C program,  put both the source code file jsonParser.
 ```
 (here we're assuming you included it directly into the working directory, if not just change the path to the subdirectory you put the file in)
 Also, remember to include the jsonParser.c in the list of files for the compilation, or if you're using a makefile, add it in there. 
+
+
+
 Now you are ready to use the library inside your program.  
 
 ## Parsing JSON
@@ -35,6 +38,8 @@ json_object * parseJson(char * stringToParse)
 The json_object type is defined at the beginning of the jsonParser.c file: it has the following attributes:
 #### 1) keyCount:
 the number of keys inside the jsonObject.
+
+
 **type**: int
 #### 2) keyList:
 The list of key-value pairs inside your json object. 
@@ -42,15 +47,23 @@ The list of key-value pairs inside your json object.
 The json_key object is also defined at the beginning of the file: we will cover it later.
 #### 3) subObjectCount
 The number of nested json sub objects inside our objects.
+
+
 **type**:: int
 #### 4) subObjects
 The list of the json sub-objects contained in our object.
+
+
 **type**:: json_object * (pointer to json_object)
 #### 5) subArrayCount
 it is the number of multi type arrays contained inside your json object.
+
+
 **type**:: int
 #### 6) subArrayList
 The list of the multi type arrays contained in your json object.
+
+
 **type**:: multitypearray * (pointer to multitypearray)
 Like the other types employed in this library, also the multitypearray is defined at the beginning of the file.
 
@@ -84,15 +97,23 @@ The name of the key.
 }
 ```
 For the second json_key object inside this json object (i.e the second key-value pair) the name of the key would be the string "age".
+
+
 **type**: char * (char pointer)
 #### 2) keyLength:
 The length of the keyName string. 
+
+
 **type**:: int
 #### 3) value
 The value corresponding to the key. In the same example presented above, if we consider the first key-value pair, then the value would be "Mark". For the second key-value pair, on the other hand, the value would be the string "19".
+
+
 **type**: char *
 #### 4) valueLength
 The length of the value string.
+
+
 **type**: int
 
 The code for the json_key type is:
@@ -111,21 +132,33 @@ The multitypearray type has the following attributes
 
 #### 1) stringCount
 The number of strings contained in our array.
+
+
 **type**: int
 #### 1) objectCount
 The number of objects contained in our array.
+
+
 **type**: int
 #### 3) subArrayCount
 The number of subArrays contained in our multi type array
+
+
 **type**: int
 #### 4) stringList
 The list of strings contained inside our array.
+
+
 **type**: char ** (a pointer to a pointer to a char)
 #### 5) objectList
 The list of objects contained inside our array.
+
+
 **type**: json_object * (a pointer to a json_object)
 #### 6) subArrayList
 The list of arrays contained in our array.
+
+
 **type**: multitypearray * (a pointer to a pointer to a multi type array)
 
 ### Parsing json
