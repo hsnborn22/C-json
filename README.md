@@ -11,7 +11,7 @@ To use the library in your C program,  put both the source code file jsonParser.
 #include "jsonParser.h"
 ```
 (here we're assuming you included it directly into the working directory, if not just change the path to the subdirectory you put the file in)
-
+Also, remember to include the jsonParser.c in the list of files for the compilation, or if you're using a makefile, add it in there. 
 Now you are ready to use the library inside your program.  
 
 ## Parsing JSON
