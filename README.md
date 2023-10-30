@@ -1,6 +1,11 @@
 # C-json
-Trying to write a functioning C json parser from scratch in as few lines of code as possible.
+A lightweight minimalistic C json parser written from scratch (no third party dependencies) written in under 300 lines of code.
 
+
+The objective of this parser is to be fast, small, compact, easy to use and of course being able to get the job done in 99% of the cases (with some problems that occasionally can be left to the user to be dealt with in exchange for the extremely small size of this library).
+
+
+Id be very happy if anyone wants to contribute and/or report an issue, so dont hesitate to do it if you want. 
 # Documentation
 
 ## Including the library inside your project
@@ -227,3 +232,6 @@ With all of this said, you should now be ready to use the library without proble
 
 1) readability of the code
 2) handle javascript boolean values better (true, false): at the current stage theyre parsed just like strings, and it is left to whoever is using the library to convert them into 0s or 1s.
+
+## License:
+[MIT](LICENSE)
