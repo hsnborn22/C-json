@@ -237,7 +237,7 @@ With all of this said, you should now be ready to use the library without proble
 [MIT](LICENSE)
 
 ## Contribution guidelines
-[Contribution guidelines](CONTRIBUTING)
+[Contribution guidelines](CONTRIBUTING.md)
 
 ## Code of conduct:
-[Code of conduct](CODE_OF_CONDUCT)
+[Code of conduct](CODE_OF_CONDUCT.md)
