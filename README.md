@@ -85,8 +85,8 @@ typedef struct JSON_OBJECT_STRUCT {
 	json_key * keyList;
 	int subObjectCount;
 	struct JSON_OBJECT_STRUCT * subObjects;
-    int subArrayCount;
-    multitypearray * subArrayList;
+    	int subArrayCount;
+    	multitypearray * subArrayList;
 } json_object;
 ```
 
